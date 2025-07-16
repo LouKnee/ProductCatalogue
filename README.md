@@ -1,2 +1,6 @@
-# ProductCatalogue
-Demonstrates how to implement a product catalogue management API with clean architecture and domain driven design.
+
+Navigate to the following url for Swagger -
+https://localhost:7140/swagger/index.html
+
+
+ 
