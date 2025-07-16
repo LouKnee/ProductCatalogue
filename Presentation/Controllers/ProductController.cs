@@ -69,7 +69,7 @@ namespace Presentation.Controllers
         }
 
         // PUT api/<Product>/updatePrice/name/price
-        [HttpPut("updatePrice/{id}")]
+        [HttpPut("updatePrice/{name}/{price}")]
         public async Task<ProductDTO> PutPrice(string name, decimal price)
         {
             var updated = await _mediator.Send(new UpdatePriceRequest()
@@ -80,11 +80,5 @@ namespace Presentation.Controllers
 
             return updated;
         }
-
-        //// DELETE api/<ProductController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

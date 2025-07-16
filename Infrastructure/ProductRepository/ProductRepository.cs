@@ -1,6 +1,7 @@
 ﻿using Application.ProductRepository;
 using Domain.Entities;
 using Infrastructure.DBContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.ProductRepository
 {
@@ -51,7 +52,9 @@ namespace Infrastructure.ProductRepository
             {
                 throw new InvalidOperationException("Database context is not initialized.");
             }
-            var product = _context.Products.FirstOrDefault(p => p.Name == name) ?? throw new KeyNotFoundException($"Product with name '{name}' not found.");
+            var product = _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Name == name) ?? throw new KeyNotFoundException($"Product with name '{name}' not found.");
             return Task.FromResult(product);
         }
 
@@ -61,9 +64,12 @@ namespace Infrastructure.ProductRepository
             {
                 throw new InvalidOperationException("Database context is not initialized.");
             }
-            var product = _context.Products.FirstOrDefault(p => p.Name == productName) ?? throw new KeyNotFoundException($"Product with name '{productName}' not found.");
+            var product = _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Name == productName) ?? throw new KeyNotFoundException($"Product with name '{productName}' not found.");
             var category = _context.Categories.FirstOrDefault(c => c.Name == categoryName) ?? throw new KeyNotFoundException($"Category with name '{categoryName}' not found.");
             product.Category = category;
+            product.UpdatedAt = DateTime.UtcNow;
             _context.SaveChanges();
             return Task.FromResult(product);
         }
@@ -74,7 +80,9 @@ namespace Infrastructure.ProductRepository
             {
                 throw new InvalidOperationException("Database context is not initialized.");
             }
-            var product = _context.Products.FirstOrDefault(p => p.Name == productName) ?? throw new KeyNotFoundException($"Product with name '{productName}' not found.");
+            var product = _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Name == productName) ?? throw new KeyNotFoundException($"Product with name '{productName}' not found.");
             product.Price = newPrice;
             product.UpdatedAt = DateTime.UtcNow;
             _context.SaveChanges();
@@ -87,7 +95,9 @@ namespace Infrastructure.ProductRepository
             {
                 throw new InvalidOperationException("Database context is not initialized.");
             }
-            var product = _context.Products.FirstOrDefault(p => p.Name == productName) ?? throw new KeyNotFoundException($"Product with name '{productName}' not found.");
+            var product = _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Name == productName) ?? throw new KeyNotFoundException($"Product with name '{productName}' not found.");
             product.StockQuantity = newStockQuantity;
             product.UpdatedAt = DateTime.UtcNow;
             _context.SaveChanges();
